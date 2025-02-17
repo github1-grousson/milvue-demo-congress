@@ -93,7 +93,7 @@ def update_dicom_tags_in_dir(input_dir, csv_data):
 def main():
     # Compute the default root directory relative to the script location.
     script_dir = os.path.dirname(os.path.abspath(__file__))
-    default_root_dir = os.path.abspath(os.path.join(script_dir, "../DICOM/00_inputs"))
+    default_root_dir = os.path.abspath(os.path.join(script_dir, "../DICOM/"))
 
     parser = argparse.ArgumentParser(
         description="Update DICOM tags based on a CSV file at the study level and regenerate CSV if changes occurred."

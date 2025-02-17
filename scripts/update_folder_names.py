@@ -111,7 +111,7 @@ def delete_empty_dirs(root_dir):
 def main():
     # Compute the default root directory relative to the script location.
     script_dir = os.path.dirname(os.path.abspath(__file__))
-    default_root_dir = os.path.abspath(os.path.join(script_dir, "../DICOM/00_inputs"))
+    default_root_dir = os.path.abspath(os.path.join(script_dir, "../DICOM"))
 
     parser = argparse.ArgumentParser(
         description="Reorganize DICOM files under the root directory into a folder structure based on DICOM tags."
@@ -136,7 +136,9 @@ def main():
         exit(1)
 
     print(f"Reorganizing DICOM files under: {input_dir}")
-    reorganize_dicom_files(input_dir)
+    list_subdirs = {"00-inputs", "01-outputs-fr",  "02-outputs-en"}
+    for subdir in list_subdirs:
+        reorganize_dicom_files(os.path.join(input_dir, subdir))
     print("Reorganization complete.")
 
     if args.delete_empty:

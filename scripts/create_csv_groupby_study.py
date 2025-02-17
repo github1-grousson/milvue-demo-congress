@@ -72,8 +72,9 @@ def write_csv(studies, output_dir):
 def main():
     # Compute the default input directory relative to the script location.
     script_dir = os.path.dirname(os.path.abspath(__file__))
-    default_input_dir = os.path.abspath(os.path.join(script_dir, "../DICOM/00_inputs"))
-
+    dicom_dir = os.path.abspath(os.path.join(script_dir, "../DICOM"))
+    default_input_dir = os.path.join(dicom_dir, "00_inputs")
+    
     parser = argparse.ArgumentParser(
         description="Generate a CSV file at study level by parsing a DICOM directory."
     )
@@ -94,8 +95,8 @@ def main():
     studies = collect_study_data(input_dir)
     print(f"Found {len(studies)} unique studies.")
 
-    # Output CSV will be placed in the same folder as the input folder.
-    write_csv(studies, input_dir)
+    # Output CSV will be placed in the same folder as root DICOMs.
+    write_csv(studies, dicom_dir)
 
 if __name__ == "__main__":
     main()
