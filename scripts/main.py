@@ -2,7 +2,7 @@
 import sys
 
 # Import the other utility scripts. Adjust the module names if necessary.
-from lib import create_csv_groupby_study, update_dcm_from_csv_study, update_folder_names
+from lib import create_csv_groupby_study, update_dcm_from_csv_study, update_folder_names, create_templates_from_csv
 
 
 def interactive_menu():
@@ -19,6 +19,7 @@ def interactive_menu():
         "1) Create CSV from DICOM folder \n"
         "2) Update DICOMs from CSV\n"
         "3) Reorganize DICOMs folders names \n"
+        "4) Create report templates from CSV\n"
         "\n"
         "q) Exit"
         "\n"
@@ -37,6 +38,9 @@ def interactive_menu():
         elif choice == '3':
             print("\nLaunching 'Reorganize folders names' utility...\n")
             update_folder_names.main()
+        elif choice == '4':
+            print("\nLaunching 'Create report templates from CSV' utility...\n")
+            create_templates_from_csv.main()
         else:
             print("Invalid choice, please try again.")
 
