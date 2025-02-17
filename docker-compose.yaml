@@ -1,0 +1,136 @@
+x-postgres-config: &postgres-config
+  POSTGRES_HOST: core-db
+  POSTGRES_DB: gorm
+  POSTGRES_USER: postgres
+  POSTGRES_PASSWORD: postgres
+  POSTGRES_PORT: 5432
+  
+services:
+  pacs:
+    container_name: milvue-pacs
+    image: jodogne/orthanc-plugins:1.12.6
+    restart: always
+    ports:
+      - 4242:4242
+    volumes:
+      - ./orthanc.json:/etc/orthanc/orthanc.json:ro
+      - orthanc_db:/var/lib/orthanc/db/
+    networks:
+      - milvue
+
+  milvue-viewer:
+    container_name: milvue-viewer
+    image: wilfriedmv/milvue-viewer:latest
+    restart: always
+    ports:
+      - 80:80
+    volumes:
+      - ./templates:/usr/share/nginx/html/templates:ro
+    networks:
+      - milvue
+
+  milvue-report-manager:
+    container_name: milvue-report-manager
+    image: wilfriedmv/milvue-report-manager:latest
+    restart: always
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/healthcheck"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    ports:
+      - 8000:8000
+    networks:
+      - milvue
+
+  core-db:
+    image: postgres:14-alpine
+    environment:
+      *postgres-config
+    volumes:
+      - type: volume
+        source: pgdata
+        target: /var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: always
+    networks:
+      - milvue
+
+  storescp:
+    image: milvue/pacsor-storescp:latest
+    restart: always
+    environment:
+      CONFIG_FILENAME: filter.cfg
+      CONFIG_PROFILE: ${CONFIG_PROFILE:-WithSC}
+      LOG_LEVEL: ${PACSOR_LOG_LEVEL:-warn}
+    volumes:
+      - inputs:/inputs
+      - type: bind
+        source: "./conf/filter.cfg"
+        target: /filter.cfg
+    healthcheck:
+      test: [ "CMD-SHELL", "echoscu -v storescp 1040" ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - milvue  
+
+  core:
+    image: milvue/pacsor-core:latest
+    environment:
+      GOMAXPROCS: 0
+      PROFILER: true
+      SIGNED_URL: ${SIGNED_URL:-true}
+      API_URL: ${API_URL:?need valid URL}
+      TOKEN: ${TOKEN:?can't be empty}
+      CALLBACK_URLS: ${CALLBACK_URLS:-http://storescu:8000}
+      NO_DUPLICATE_UPLOAD: ${NO_DUPLICATE_UPLOAD:-true}
+      <<: *postgres-config
+    depends_on:
+      core-db:
+        condition: service_healthy
+    restart: always
+    volumes:
+        - inputs:/inputs
+        - outputs:/outputs
+    healthcheck:
+      test: [ "CMD", "./healthcheck" ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - milvue
+
+  storescu:
+    image: milvue/pacsor-storescu:latest
+    restart: always
+    environment:
+      PACS_IP: pacs
+      PACS_PORT: 4242
+      PACS_AET: ORTHANC
+      MILVUE_AET: ${MILVUE_AET:-MILVUE}
+    volumes:
+      - outputs:/outputs
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -X GET storescu:8000/healthcheck" ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - milvue
+  
+volumes: 
+  orthanc_db:
+  inputs:
+  outputs:
+  pgdata:
+
+networks:
+  milvue:
+    name: milvue-net
+  
