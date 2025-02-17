@@ -2,9 +2,8 @@
 import sys
 
 # Import the other utility scripts. Adjust the module names if necessary.
-import create_csv_groupby_study
-import update_dcm_from_csv_study
-import update_folder_names
+from lib import create_csv_groupby_study, update_dcm_from_csv_study, update_folder_names
+
 
 def interactive_menu():
     """
@@ -17,10 +16,12 @@ def interactive_menu():
     """
     menu = (
         "\nPlease enter key to launch or q to exit:\n"
-        "1) Create CSV from DICOM root folder --> execute main from create_csv_groupby_study\n"
-        "2) Update DICOM from CSV --> execute main of update_dcm_from_csv_study\n"
-        "3) Reorganize folders names --> execute main of update_folder_names\n"
+        "1) Create CSV from DICOM folder \n"
+        "2) Update DICOMs from CSV\n"
+        "3) Reorganize DICOMs folders names \n"
+        "\n"
         "q) Exit"
+        "\n"
     )
     while True:
         choice = input(menu + "\nYour choice: ").strip()
