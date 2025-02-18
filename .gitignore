@@ -7,8 +7,3 @@
 ## Ignore final templates files in templates folder
 templates/*.docx
 
-# For main branch only
-## Ignore DICOM files
-*.dcm
-## Ignore main templates files
-assets/TEMPLATES/*.docx
