@@ -19,6 +19,7 @@ The demo integrates with a Microsoft Word Plugin to generate reports and include
     - [Option 5: Import DICOM Folders](#option-5-import-dicom-folders)
     - [How to Use the Interactive Menu](#how-to-use-the-interactive-menu)
 - [How to Update DICOMs and Templates](#how-to-update-dicoms-and-templates)
+- [How to setup DICOM nodes in PACS](#how-to-setup-dicom-nodes-in-pacs)
 
 ## Global Scenario
 
@@ -171,3 +172,22 @@ When you select option **5**, you will see a sub‐menu:
 5.  **Generate Final Templates:** Create final report templates based on the CSV file.
 6.  **Import DICOM Files:** Use the import option from the interactive menu to import DICOM files from the source folders.
 7.  **(Optional)** Generate DICOM results by pushing to the modality via the PACS.
+
+## How to setup DICOM nodes in PACS
+
+1. Edit the file `orthanc.json`
+2. Find the key `DicomModalities`
+3. Update or add a new node with the following format:
+
+    ```json
+    "DicomModalities" : {
+        "Milvue_AI_engine" :["MILVUE", "storescp", 1040],
+        "MICRODICOM": ["MICRODICOM", "127.0.0.1", 11112]
+    }
+    ```
+4. Save file
+5. Restart the docker container
+    ```bash
+        docker compose stop
+        docker compose up -d
+    ```
