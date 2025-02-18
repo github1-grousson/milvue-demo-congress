@@ -1,6 +1,5 @@
 
 # Milvue Demo Congress
-====================
 
 This repository hosts the demo system for the Milvue congress demonstration. This version demonstrates the use of **TechCareReport** with a PACS system.
 The demo integrates with a Microsoft Word Plugin to generate reports and includes an AI Assistant.
@@ -8,7 +7,7 @@ The demo integrates with a Microsoft Word Plugin to generate reports and include
 **Note:** This demo setup works only on Microsoft Windows.
 
 ## Table of Contents
--------------------
+
 - [Global Scenario](#global-scenario)
 - [Setup Instructions](#setup-instructions)
   - [1. Clone the Repository](#1-clone-the-repository)
@@ -22,7 +21,7 @@ The demo integrates with a Microsoft Word Plugin to generate reports and include
 - [How to Update DICOMs and Templates](#how-to-update-dicoms-and-templates)
 
 ## Global Scenario
----------------
+
 
 1.  Open a browser and navigate to [http://demo.milvue.local](http://demo.milvue.local).
 2.  Click on a study line to view details.
@@ -34,7 +33,7 @@ The demo integrates with a Microsoft Word Plugin to generate reports and include
 8.  Refresh the browser viewer page to see the final report.
 
 ## Setup Instructions
-------------------
+
 
 ### 1\. Clone the Repository
 
@@ -82,7 +81,7 @@ Edit the `.env` file and complete the API URL and token as needed.
     *   Note: The package that will be downloaded is a ZIP file. Extract it and run the installers. Start with the *TechCareReport.msi* to install Word add-in, then run the *MilvueReportMacroInstall.exe* to install the report macro.
 
 ## DICOM & Template Utilities
---------------------------
+
 
 This repository includes several utilities to manage DICOM files and report templates. They are accessible via an **interactive menu**, which simplifies the following tasks:
 
@@ -133,7 +132,7 @@ When you select option **5**, you will see a sub‐menu:
     *   `02_outputs_en`   
 
 #### How to Use the Interactive Menu
--------------------------------
+
 
 1.  **Launch the Menu:**
     
@@ -162,7 +161,7 @@ When you select option **5**, you will see a sub‐menu:
     *   Press **4** to go back to the main menu.
 
 ## How to Update DICOMs and Templates
-----------------------------------
+
 
 1.  **Create CSV from DICOMs:** Generate a CSV file from your DICOM folder.
 2.  **Edit CSV:** Update the CSV file with the desired report template name in the last column (`ReportTemplateName`).  
