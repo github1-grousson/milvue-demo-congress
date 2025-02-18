@@ -173,3 +173,6 @@ cython_debug/
 #ignore bak files
 *.bak
 
+# For all branch only
+## Ignore final templates files in templates folder
+templates/*.docx
