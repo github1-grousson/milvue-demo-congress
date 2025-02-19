@@ -13,27 +13,63 @@ import os
 import sys
 import httplib2
 import argparse
+import json
+import pydicom
 
-def upload_file(path: str, URL: str, headers: dict) -> tuple:
+def upload_file(path: str, upload_url: str, find_url: str, headers: dict) -> tuple:
     """
-    Upload a single file to the PACS via the REST API.
+    Upload a single DICOM file to Orthanc via the REST API.
+    
+    Before uploading, the function extracts the SOP Instance UID from the file and
+    sends a query to Orthanc’s /tools/find endpoint. If an instance with the same UID
+    is already present, the upload is skipped.
     
     Returns a tuple: (uploaded_successfully, processed)
       - uploaded_successfully is True if the file was uploaded successfully.
-      - processed is True if the file was processed (i.e., not skipped).
+      - processed is True if the file was processed (even if skipped).
     """
+    # Attempt to read the DICOM header and extract the SOPInstanceUID.
+    instance_uid = None
+    try:
+        ds = pydicom.dcmread(path, stop_before_pixels=True)
+        instance_uid = ds.SOPInstanceUID
+    except Exception as e:
+        sys.stderr.write(f"Error reading DICOM header from {path}: {e}\n")
+    
+    # If a UID was found, check if the instance already exists in Orthanc.
+    if instance_uid:
+        query_payload = json.dumps({
+            "Level": "Instance",
+            "Query": {"SOPInstanceUID": instance_uid}
+        })
+        try:
+            h = httplib2.Http()
+            find_headers = {"Content-Type": "application/json"}
+            resp, content = h.request(find_url, 'POST', body=query_payload, headers=find_headers)
+            if resp.status == 200:
+                # Parse the returned JSON array.
+                results = json.loads(content.decode('utf-8') if isinstance(content, bytes) else content)
+                if isinstance(results, list) and len(results) > 0:
+                    sys.stdout.write(f"Skipping {path}: instance {instance_uid} already exists in PACS.\n")
+                    return (False, True)  # Processed but not uploaded.
+            else:
+                sys.stderr.write(f"Error checking instance existence for {path}: HTTP {resp.status}\n")
+        except Exception as e:
+            sys.stderr.write(f"Error checking instance existence for {path}: {e}\n")
+    
+    # Read file content for upload.
     try:
         with open(path, 'rb') as f:
-            content = f.read()
+            file_content = f.read()
     except Exception as e:
         sys.stderr.write(f"Error reading file {path}: {e}\n")
         return (False, False)
-
+    
     sys.stdout.write(f"Importing {path}")
-
+    
     try:
         h = httplib2.Http()
-        resp, _ = h.request(URL, 'POST', body=content, headers=headers)
+        resp, _ = h.request(upload_url, 'POST', body=file_content, headers=headers)
         if resp.status == 200:
             sys.stdout.write(" => success\n")
             return (True, True)
@@ -59,6 +95,9 @@ def process_folder(root_folder: str, URL: str):
     #define the endpoint URL which is join of URL and /instances
     rest_api_url = URL + "/instances"
 
+    #define the endpoint URL which is join of URL and /tools/find
+    find_url = URL + "/tools/find"
+
     # Define headers inside the function.
     headers = {"content-type": "application/dicom"}
 
@@ -66,7 +105,7 @@ def process_folder(root_folder: str, URL: str):
     skip_extensions = {
         '.json', '.csv', '.log', '.py', '.txt', '.docx',
         '.jpeg', '.jpg', '.png', '.pdf', '.zip', '.tar',
-        '.gz', '.tgz', '.bz2', '.7z'
+        '.gz', '.tgz', '.bz2', '.7z', '.md'
     }
 
     if not os.path.isdir(root_folder):
@@ -85,7 +124,7 @@ def process_folder(root_folder: str, URL: str):
                 skipped_count += 1
                 continue
             full_path = os.path.join(root, filename)
-            uploaded, processed = upload_file(full_path, rest_api_url, headers)
+            uploaded, processed = upload_file(full_path, rest_api_url, find_url , headers)
             total_file_count += 1
             if processed and uploaded:
                 dicom_count += 1
