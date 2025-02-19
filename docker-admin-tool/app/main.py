@@ -78,7 +78,7 @@ def interactive_menu():
     default_output_templates = os.path.abspath(os.path.join(script_dir, "templates"))
 
     menu = (
-        "\nDICOM Utilities 1.3 Main Menu\n"
+        "\nDICOM Utilities 1.4 Main Menu\n"
         "\nPlease enter key to launch or 'q' to exit:\n"
         "1) Create CSV from DICOM folder\n"
         "2) Update DICOMs from CSV\n"
