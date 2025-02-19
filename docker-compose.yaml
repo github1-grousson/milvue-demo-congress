@@ -61,10 +61,9 @@ services:
       - milvue
 
   storescp:
-    image: milvue/pacsor-storescp:latest
+    image: milvue/pacsor-storescp-wgs:latest
     restart: always
     environment:
-      CONFIG_FILENAME: filter.cfg
       CONFIG_PROFILE: ${CONFIG_PROFILE:-WithSC}
       LOG_LEVEL: ${PACSOR_LOG_LEVEL:-warn}
     volumes:
@@ -78,7 +77,27 @@ services:
       timeout: 5s
       retries: 10
     networks:
-      - milvue  
+      - milvue
+
+  storescp-precert:
+    image: milvue/pacsor-storescp-wgs:latest
+    restart: always
+    environment:
+      CORE_HOST: core-precert
+      CONFIG_PROFILE: ${CONFIG_PROFILE:-WithSC}
+      LOG_LEVEL: ${PACSOR_LOG_LEVEL:-warn}
+    volumes:
+      - inputs:/inputs
+      - type: bind
+        source: "./conf/filter.cfg"
+        target: /filter.cfg
+    healthcheck:
+      test: [ "CMD-SHELL", "echoscu -v storescp 1040" ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - milvue
 
   core:
     image: milvue/pacsor-core:latest
@@ -93,6 +112,34 @@ services:
       <<: *postgres-config
     depends_on:
       core-db:
+        condition: service_healthy
+    restart: always
+    volumes:
+        - inputs:/inputs
+        - outputs:/outputs
+    healthcheck:
+      test: [ "CMD", "./healthcheck" ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - milvue
+
+  core-precert:
+    image: milvue/pacsor-core:latest
+    environment:
+      GOMAXPROCS: 0
+      PROFILER: true
+      SIGNED_URL: ${SIGNED_URL:-true}
+      API_URL: ${API_URL_PRECERT:?need valid URL}
+      TOKEN: ${TOKEN_PRECERT:?can't be empty}
+      CALLBACK_URLS: ${CALLBACK_URLS:-http://storescu:8000}
+      NO_DUPLICATE_UPLOAD: ${NO_DUPLICATE_UPLOAD:-true}
+      <<: *postgres-config
+    depends_on:
+      core-db:
+        condition: service_healthy
+      core:
         condition: service_healthy
     restart: always
     volumes:
