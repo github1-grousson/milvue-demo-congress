@@ -72,13 +72,13 @@ def interactive_menu():
     # We start by fixing default variables
     default_PACS_URL = "http://127.0.0.1/pacs"
     script_dir = os.path.dirname(os.path.abspath(__file__))
-    default_dicom_root = os.path.abspath(os.path.join(script_dir, "../assets/DICOM"))
+    default_dicom_root = os.path.abspath(os.path.join(script_dir, "assets/DICOM"))
     default_csv_file = os.path.join(default_dicom_root, "studies.csv")
-    default_templates_root = os.path.abspath(os.path.join(script_dir, "../assets/TEMPLATES"))
-    default_output_templates = os.path.abspath(os.path.join(script_dir, "../templates"))
-
+    default_templates_root = os.path.abspath(os.path.join(script_dir, "assets/TEMPLATES"))
+    default_output_templates = os.path.abspath(os.path.join(script_dir, "templates"))
 
     menu = (
+        "\nDICOM Utilities 1.3 Main Menu\n"
         "\nPlease enter key to launch or 'q' to exit:\n"
         "1) Create CSV from DICOM folder\n"
         "2) Update DICOMs from CSV\n"
