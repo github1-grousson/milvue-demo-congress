@@ -1,0 +1,2 @@
+httplib2==0.20.2
+pydicom==3.0.1

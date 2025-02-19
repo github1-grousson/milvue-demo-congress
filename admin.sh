@@ -1,4 +1,4 @@
 #!/bin/bash
 
-# This script is used to launch python script for admin interactive system management
-python3 scripts/main.py
+DIR="$(cd "$(dirname "$0")" && pwd)"
+docker run --name milvue-admin-tool --rm -it --network=host -v "$DIR/assets:/app/assets" -v "$DIR/templates:/app/templates" wilfriedmv/milvue-admin-tool:latest
