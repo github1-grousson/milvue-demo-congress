@@ -210,7 +210,8 @@
      * to the DICOM protocol on the remote modality (usually 104).
      **/
     // "sample" : [ "STORESCP", "127.0.0.1", 2000 ]
-    "Azure_beta" :["MILVUE", "storescp", 1040],
+    "Milvue_prod" :["MILVUE", "storescp", 1040],
+    "Milvue_precert" :["MILVUE", "storescp-precert", 1040],
     "MICRODICOM": ["MICRODICOM", "172.27.16.1", 11112]
 
     /**
