@@ -160,11 +160,11 @@ When you select option **Import DICOM folders**, you will see a sub‐menu:
 
 By default the PACS system is configured with three DICOM nodes:
 
-    ```json
-    "Milvue_prod" : ["MILVUE", "storescp", 1040],
-    "Milvue_precert" : ["MILVUE", "storescp-precert", 1040],
-    "MICRODICOM": ["MICRODICOM", "172.27.16.1", 11112]
-    ```
+  ```json
+  "Milvue_prod" : ["MILVUE", "storescp", 1040],
+  "Milvue_precert" : ["MILVUE", "storescp-precert", 1040],
+  "MICRODICOM": ["MICRODICOM", "172.27.16.1", 11112]
+  ```
 
 Two nodes are configured for sending DICOM files to the Milvue AI engine and one node for sending DICOM files to the MICRODICOM local workstation.
 
