@@ -8,7 +8,7 @@ build:
 	@if [ ! -f VERSION ]; then echo "1.0" > VERSION; fi; \
 	current_version=$$(cat VERSION); \
 	echo "Building docker image '$(DOCKERHUB_USER)/$(IMAGE_NAME)' with version $$current_version"; \
-	docker build -t $(DOCKERHUB_USER)/$(IMAGE_NAME):$$current_version .; \
+	docker build --build-arg VERSION=$$current_version -t $(DOCKERHUB_USER)/$(IMAGE_NAME):$$current_version .; \
 	docker tag $(DOCKERHUB_USER)/$(IMAGE_NAME):$$current_version $(DOCKERHUB_USER)/$(IMAGE_NAME):latest; \
 	echo $$current_version > .LAST_VERSION; \
 	next_version=$$(echo $$current_version | awk -F. '{printf "%d.%d", $$1, $$2+1}'); \
