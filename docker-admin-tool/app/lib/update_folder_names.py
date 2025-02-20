@@ -53,7 +53,7 @@ def reorganize_dicom_files(root_dir):
     """
     # List of file extensions to skip (case-insensitive)
     skip_extensions = {'.csv', '.log', '.py', '.txt', '.docx', '.jpeg', '.jpg', '.png', 
-                       '.pdf', '.zip', '.tar', '.gz', '.tgz', '.bz2', '.7z'}
+                       '.pdf', '.zip', '.tar', '.gz', '.tgz', '.bz2', '.7z','.md'}
 
     # Create a list of files to process (to avoid modifying the tree while walking)
     files_to_process = []
