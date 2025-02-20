@@ -1,11 +1,6 @@
 #ignore files
 *.bak
 *.Identifier
-*.env
-
-# For all branch
-## Ignore final templates files in templates folder
-templates/*.docx
 
 # For all branch only
 ## Ignore final templates files in templates folder
