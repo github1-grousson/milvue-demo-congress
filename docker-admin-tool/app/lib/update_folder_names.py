@@ -53,7 +53,7 @@ def reorganize_dicom_files(root_dir):
     """
     # List of file extensions to skip (case-insensitive)
     skip_extensions = {'.csv', '.log', '.py', '.txt', '.docx', '.jpeg', '.jpg', '.png', 
-                       '.pdf', '.zip', '.tar', '.gz', '.tgz', '.bz2', '.7z'}
+                       '.pdf', '.zip', '.tar', '.gz', '.tgz', '.bz2', '.7z','.md'}
 
     # Create a list of files to process (to avoid modifying the tree while walking)
     files_to_process = []
@@ -114,7 +114,7 @@ def process_rename(root_folder: str, delete_empty_folders : bool = True):
         exit(1)
 
     print(f"Reorganizing DICOM files under: {root_folder}")
-    list_subdirs = {"00-inputs", "01-outputs-fr",  "02-outputs-en"}
+    list_subdirs = {"00_inputs", "01_outputs-fr",  "02_outputs-en"}
     for subdir in list_subdirs:
         reorganize_dicom_files(os.path.join(root_folder, subdir))
 
