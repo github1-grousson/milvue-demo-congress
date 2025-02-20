@@ -171,6 +171,7 @@ cython_debug/
 
 #ignore bak files
 *.bak
+*.Identifier
 
 # For all branch
 ## Ignore final templates files in templates folder
