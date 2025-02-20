@@ -97,72 +97,55 @@ This repository includes several utilities to manage DICOM files and report temp
 To launch the interactive menu, run:
 
     
-    python main.py
+    ./admin.sh
+
+if the script file is not set as executable, you can run it with :
+
+    bash admin.sh
     
 
 The menu will display:
 
-    
-    Please enter key to launch or 'q' to exit:
-    1) Create CSV from DICOM folder
-    2) Update DICOMs from CSV
-    3) Reorganize DICOM folders names
-    4) Create report templates from CSV
-    5) Import DICOM folders
-    
-    q) Exit
+    Milvue admin Utilities 1.x Main Menu
+    ------------------------------------
+
+        Create CSV from DICOM folder
+
+          Update DICOMs from CSV
+
+      Reorganize DICOMs folders names
+
+     Create report templates from CSV
+
+           Import DICOM folders
+
+                 Exit
     
 
 #### Option 5: Import DICOM Folders
 
-When you select option **5**, you will see a sub‐menu:
+When you select option **Import DICOM folders**, you will see a sub‐menu:
 
-    
-    Please enter key to import DICOM folders or '4' to go back:
-    1) Import '00_inputs'
-    2) Import '01_outputs_fr'
-    3) Import '02_outputs_en'
-    4) Back
-    
+     Import DICOM folders
+     --------------------
 
-*   Selecting **1**, **2**, or **3** will call the `process_folder()` function with the corresponding subdirectory (relative to the DICOM root folder).
-*   The default DICOM root is computed as: `script_dir/../../assets/DICOM`
+      Import '00_inputs'
+    Import '01_outputs_fr'
+    Import '02_outputs_en'
+     
+            Back
+    
+    
+*   Selecting **1**, **2**, or **3** will call the `import` function with the corresponding subdirectory (relative to the DICOM root folder).
+*   **Note**: If an instance already exist in the PACS, it will be skipped.
+*   The default DICOM root is computed as: `<project dir>/assets/DICOM`
 *   Available subdirectories are:
     *   `00_inputs`
     *   `01_outputs_fr`
     *   `02_outputs_en`   
 
-#### How to Use the Interactive Menu
-
-
-1.  **Launch the Menu:**
-    
-        python main.py
-    
-2.  **Select a Utility:**
-    *   Press **1** to create a CSV file from the DICOM folder.
-    *   Press **2** to update DICOMs from the CSV file.
-    *   Press **3** to reorganize the DICOM folder structure.
-    *   Press **4** to generate report templates from the CSV file.
-    *   Press **5** to import DICOM folders.
-3.  **Import DICOM Folders Sub-menu:**
-    
-    When selecting option **5**, the sub-menu appears:
-    
-        
-        1) Import '00_inputs'
-        2) Import '01_outputs_fr'
-        3) Import '02_outputs_en'
-        4) Back
-              
-    
-    *   Press **1** to import `00_inputs`
-    *   Press **2** to import `01_outputs_fr`
-    *   Press **3** to import `02_outputs_en`
-    *   Press **4** to go back to the main menu.
 
 ## How to Update DICOMs and Templates
-
 
 1.  **Create CSV from DICOMs:** Generate a CSV file from your DICOM folder.
 2.  **Edit CSV:** Update the CSV file with the desired report template name in the last column (`ReportTemplateName`).  
@@ -174,6 +157,16 @@ When you select option **5**, you will see a sub‐menu:
 7.  **(Optional)** Generate DICOM results by pushing to the modality via the PACS.
 
 ## How to setup DICOM nodes in PACS
+
+By default the PACS system is configured with three DICOM nodes:
+
+    ```json
+    "Milvue_prod" : ["MILVUE", "storescp", 1040],
+    "Milvue_precert" : ["MILVUE", "storescp-precert", 1040],
+    "MICRODICOM": ["MICRODICOM", "172.27.16.1", 11112]
+    ```
+
+Two nodes are configured for sending DICOM files to the Milvue AI engine and one node for sending DICOM files to the MICRODICOM local workstation.
 
 1. Edit the file `orthanc.json`
 2. Find the key `DicomModalities`
