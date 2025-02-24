@@ -18,5 +18,5 @@ Ad Measurements Foot     ,EN_AD_MEASUREMENTS_FOOT     ,        20000101 ,025Y   
 Ad Normal Pelvis Hip     ,EN_AD_NORMAL_PELVIS_HIP     ,        19490101 ,074Y       ,M          ,2409030908      , 20240101 ,PELVIS AND HIP 2 INC                    ,2.16.840.1.113669.632.20.1516859504.537038478.10004680343        ,EN_Pelvis_Hip_Normal_Table
 Paedia Bone Age          ,EN_PAEDIA_BONE_AGE          ,        19700101 ,010Y       ,F          ,2409030858      , 19700101 ,LEFT HAND BONE AGE                      ,1.2.826.0.1.3680043.2.406.337543.1.415842.1.191227152825         ,EN_Bone_Age
 Paedia EOS Spine         ,EN_PAEDIA_EOS_SPINE         ,        20000101 ,009Y       ,F          ,2469857459      , 20090101 ,TOTAL SPINE & PELVIS                    ,1.2.826.0.1.3680043.8.394.146261.12130.30746.1.401286126         ,EN_EOS_Spine_Paediatric
-Paedia Fracture Shoulder ,EN_PAEDIA_FRACTURE_SHOULDER ,        20180326 ,005Y       ,F          ,3542832027      , 20230908 ,FRACTURE DETECTION                      ,1.2.826.0.1.3680043.8.498.10602281654353842887997402950775890203 ,Shoulder_Fracture_Paediatric
+Paedia Fracture Shoulder ,EN_PAEDIA_FRACTURE_SHOULDER ,        20180326 ,005Y       ,F          ,3542832027      , 20230908 ,FRACTURE DETECTION                      ,1.2.826.0.1.3680043.8.498.10602281654353842887997402950775890203 ,EN_Shoulder_Fracture_Paediatric
 
