@@ -1,6 +1,7 @@
 #ignore files
 *.bak
 *.Identifier
+.env
 
 # For all branch only
 ## Ignore final templates files in templates folder
