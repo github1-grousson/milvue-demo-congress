@@ -58,6 +58,8 @@ services:
     restart: always
     networks:
       - milvue
+    profiles:
+      - withpacsor
 
   storescp:
     image: milvue/pacsor-storescp-wgs:latest
@@ -77,6 +79,8 @@ services:
       retries: 10
     networks:
       - milvue
+    profiles:
+      - withpacsor
 
   storescp-precert:
     image: milvue/pacsor-storescp-wgs:latest
@@ -97,6 +101,8 @@ services:
       retries: 10
     networks:
       - milvue
+    profiles:
+      - withpacsor
 
   core:
     image: milvue/pacsor-core:latest
@@ -123,6 +129,8 @@ services:
       retries: 10
     networks:
       - milvue
+    profiles:
+      - withpacsor
 
   core-precert:
     image: milvue/pacsor-core:latest
@@ -151,6 +159,8 @@ services:
       retries: 10
     networks:
       - milvue
+    profiles:
+      - withpacsor
 
   storescu:
     image: milvue/pacsor-storescu:latest
@@ -169,6 +179,8 @@ services:
       retries: 10
     networks:
       - milvue
+    profiles:
+      - withpacsor
   
 volumes: 
   orthanc_db:
