@@ -1,0 +1,34 @@
+services:
+  mirth:
+    image: nextgenhealthcare/connect
+    container_name: mirth-connect
+    environment:
+      - VMOPTIONS=-Xmx512m
+    secrets:
+      - mirth_properties
+    ports:
+      - 8080:8080/tcp
+      - 8443:8443/tcp
+      - 13370:13370/tcp
+    volumes:
+      - ./hl7:/hl7_out
+      - mirth-data:/opt/connect/appdata
+    networks:
+      - milvue
+    
+secrets:
+  mirth_properties:
+    file: conf/secret.properties
+
+networks:
+  milvue:
+    name: milvue-congress-net
+    external: true
+
+volumes:
+  mirth-data:
+    name: mirth-data
+    external: true
+  
+
+    
