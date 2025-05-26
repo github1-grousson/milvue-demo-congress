@@ -1,0 +1,6 @@
+{
+  "milvueReporting": {
+    "iframeUrl": "https://storage.googleapis.com/demo-iframe.milvue.com/index.html",
+    "token": "<token>"
+  }
+}

@@ -18,12 +18,13 @@ services:
 
   milvue-viewer:
     container_name: milvue-viewer
-    image: wilfriedmv/milvue-ohif-viewer:2.7
+    image: wilfriedmv/milvue-ohif-viewer:2.8
     restart: always
     ports:
       - 80:80
     volumes:
       - ./conf/milvue-ohif-nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./conf/milvue-tcr-config.json:/usr/share/nginx/html/milvue-tcr-config.json:ro
       - ./templates:/usr/share/nginx/html/templates:ro
     networks:
       - milvue
