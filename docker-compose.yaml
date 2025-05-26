@@ -18,7 +18,7 @@ services:
 
   milvue-viewer:
     container_name: milvue-viewer
-    image: wilfriedmv/milvue-ohif-viewer:latest
+    image: wilfriedmv/milvue-ohif-viewer:2.7
     restart: always
     ports:
       - 80:80
@@ -97,6 +97,8 @@ services:
       retries: 10
     networks:
       - milvue
+    profiles:
+      - withpacsorprecert
 
   core:
     image: milvue/pacsor-core:latest
@@ -151,6 +153,8 @@ services:
       retries: 10
     networks:
       - milvue
+    profiles:
+      - withpacsorprecert
 
   storescu:
     image: milvue/pacsor-storescu:latest
@@ -169,14 +173,59 @@ services:
       retries: 10
     networks:
       - milvue
+    profiles:
+      - withpacsor
+
+  hl7:
+    image: "milvue/pacsor-hl7:latest"
+    restart: always
+    environment:
+      ENABLE_HL7: true
+      SEN_APP: ${SENDING_APPLICATION:-MILVUE_GATEWAY}
+      SEN_FAC: ${SENDING_FACILITY:-MILVUE}
+      REC_APP: ${RECEIVING_APPLICATION:?need valid RECEIVING_APPLICATION}
+      REC_FAC: ${RECEIVING_FACILITY:?need valid RECEIVING_FACILITY}
+      HL7_LANG: ${HL7_LANGUAGE:-FR}
+      RIS_HOST: ${RIS_HOST_IP:?need valid RIS_HOST IP address}
+      RIS_PORT: ${RIS_HOST_PORT:?need valid RIS_PORT}
+      RIS_TIMEOUT: ${RIS_TIMEOUT:-15}
+      INCLUDE_REPORT: ${INCLUDE_TECHCARE_REPORT:-false}
+      API_URL: ${API_URL:?need valid URL}
+      REPORT_URL: ${TECHCARE_REPORT_URL:?need valid report URL}
+      TOKEN: ${TOKEN:?can't be empty}
+      REPORT_FORMAT: ${TECHCARE_REPORT_FORMAT:-B64}
+      DEF_PID_ISSUER: ${DEF_PID_ISSUER:-MILVUE}
+      LOG_LEVEL: ${HL7_LOG_LEVEL:-WARN}
+      GCP_LOGS: ${GCP_LOGS:-true}
+      POPULATE_PID: ${POPULATE_PID:-true}
+      POPULATE_PV1: ${POPULATE_PV1:-false}
+      POPULATE_ORC: ${POPULATE_ORC:-true}
+      POPULATE_ZDS: ${POPULATE_ZDS:-true}
+      SIUID_IN_OBX1: ${SIUID_IN_OBX1:-true}
+      OBX_UPPERCASE: ${OBX_UPPERCASE:-true}
+      HTTP_TIMEOUT: ${HTTP_TIMEOUT:-600}
+    volumes:
+      - outputs:/outputs
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -X GET hl7:8000/healthcheck" ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - milvue
+    profiles:
+      - withhl7
   
 volumes: 
   orthanc_db:
+    name: milvue-congress-orthancdb
+    external: true
   inputs:
   outputs:
   pgdata:
 
 networks:
   milvue:
-    name: milvue-net
+    name: milvue-congress-net
+    external: true
   
